@@ -22,7 +22,7 @@ jobs:
   
   construir:
     name: construir
-    need: revisar
+    needs: revisar
     runs-on: ubuntu-latest
 
     steps:
