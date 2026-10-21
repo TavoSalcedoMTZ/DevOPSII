@@ -13,7 +13,7 @@ jobs:
 
     steps:
      - name: Importar Checkout
-       uses: actions/checkout@4
+       uses: actions/checkout@v4
 
      - name: Lint de la receta
        uses: hadolint/hadolint-action@v3.4.0
