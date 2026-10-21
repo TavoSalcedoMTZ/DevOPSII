@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 
- jobs:
+jobs:
   construir:
     name: Lint y Construccion
     runs-on: ubuntu-latest
