@@ -28,6 +28,7 @@ jobs:
     steps:
      - name: construir Imagen
        uses: actions/checkout@v4
+     - name: Construir Imagen
        run: docker build -t etiqueta .
 
     
