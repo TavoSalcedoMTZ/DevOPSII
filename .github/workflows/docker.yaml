@@ -29,7 +29,7 @@ jobs:
      - name: construir Imagen
        uses: actions/checkout@v4
      - name: Construir Imagen
-       run: docker build -t etiqueta .
+       run: docker build -t ${{github.repository}}/${{github.sha}} .
 
     
   
