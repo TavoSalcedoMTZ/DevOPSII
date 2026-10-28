@@ -45,7 +45,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{github.actor}}/minecraft-server:latest
+          tags: ghcr.io/tavosalcedomtz/minecraft-server:latest
 
 
 
