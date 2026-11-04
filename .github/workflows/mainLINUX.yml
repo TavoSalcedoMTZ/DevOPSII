@@ -22,7 +22,29 @@ jobs:
           dockerfile: Dockerfile
           ignore: DL3008, DL4006
           
-  construir:
+  construir-windows:
+    needs: revisar
+    runs-on: windows-latest
+
+    steps:
+    - name: Descargar Repo  
+      uses: actions/checkout@v4
+
+    - name: Constuir Imagen
+      run: docker build -t servidor-minecraft:latest .
+
+    - name: Exportar imagen
+      run: docker save servidor-minecraft:latest -o servidor.tar
+
+    - name: Subir Imagen
+      uses: actions/upload-artifact@v7
+      with:
+        name: imagen-docker
+        path: servidor.tar
+        compression-level: 0
+
+
+  construir-linux:
     needs: revisar
     runs-on: ubuntu-22.04
 
@@ -46,7 +68,7 @@ jobs:
 
   impotar-linux:
    runs-on: ubuntu-22.04
-   needs: construir
+   needs: construir-linux
 
    steps:
      - name: Descargar Artifact
@@ -64,4 +86,27 @@ jobs:
        run: |
         docker images
         docker inspect servidor-minecraft:latest
-    
+
+  impotar-windows:
+    runs-on: windows-latest
+    needs: construir-windows
+    steps:
+     - name: Descargar Artifact
+       uses: actions/download-artifact@v8
+       with:
+          name: imagen-docker
+            
+     - name: Verificar Imagen
+       shell: pwsh
+       run: Get-item servidor.tar
+         
+     - name: Cargar Imagen de docker
+       shell: pwsh
+       run: docker load -i servidor.tar
+         
+     - name: Verificar Importacion
+       shell: pwsh
+       run: |
+        docker images
+        docker inspect minecraft-server:latest
+      
