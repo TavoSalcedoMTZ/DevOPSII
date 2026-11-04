@@ -44,7 +44,7 @@ jobs:
         compression-level: 0
 
 
-  impotar-windows:
+  impotar-linux:
    runs-on: ubuntu-22.04
    needs: construir
 
@@ -54,15 +54,14 @@ jobs:
        with:
           name: imagen-docker
           
-    # - name: Verificar Imagen
-     #  run: Get-item servidor.tar
+     - name: Verificar Imagen
+       run: ls -l servidor.tar
        
      - name: Cargar Imagen de docker
        run: docker load -i servidor.tar
        
      - name: Verificar Importacion
-       shell: pwsh
        run: |
         docker images
-        docker inspect minecraft-server:latest
+        docker inspect servidor-minecraft:latest
     
