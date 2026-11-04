@@ -34,7 +34,7 @@ jobs:
       run: docker build -t servidor-minecraft:lastest .
 
     - name: Exportar imagen
-      run: docker save servidor-minecraft:latest -o servidor.tar
+      run: docker save servidor-minecraft:lastest -o servidor.tar
 
     - name: Subir Imagen
       uses: actions/upload-artifact@v7
