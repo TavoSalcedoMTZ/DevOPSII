@@ -67,4 +67,24 @@ jobs:
        run: |
         docker images
         docker inspect minecraft-server:latest
-    
+
+  impotar-linux:
+   runs-on: ubuntu-22.04
+   needs: construir
+
+   steps:
+     - name: Descargar Artifact
+       uses: actions/download-artifact@v8
+       with:
+          name: imagen-docker
+          
+     - name: Verificar Imagen
+       run: ls -l servidor.tar
+       
+     - name: Cargar Imagen de docker
+       run: docker load -i servidor.tar
+       
+     - name: Verificar Importacion
+       run: |
+        docker images
+        docker inspect servidor-minecraft:latest
