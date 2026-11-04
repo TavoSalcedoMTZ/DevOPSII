@@ -1,0 +1,68 @@
+name: Builder Imagen LINUX
+
+on:
+  workflow_dispatch: # Manual
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  revisar:
+    name: Lint y Construccion
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Importar Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint de la receta
+        uses: hadolint/hadolint-action@v3.4.0
+        with:
+          dockerfile: Dockerfile
+          ignore: DL3008, DL4006
+          
+  construir:
+    needs: revisar
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Descargar Repo  
+      uses: actions/checkout@v4
+
+    - name: Constuir Imagen
+      run: docker build -t servidor-minecraft:latest .
+
+    - name: Exportar imagen
+      run: docker save servidor-minecraft:latest -o servidor.tar
+
+    - name: Subir Imagen
+      uses: actions/upload-artifact@v7
+      with:
+        name: imagen-docker
+        path: servidor.tar
+        compression-level: 0
+
+
+  impotar-windows:
+   runs-on: ubuntu-22.04
+   needs: construir
+
+   steps:
+     - name: Descargar Artifact
+       uses: actions/download-artifact@v8
+       with:
+          name: imagen-docker
+          
+     - name: Verificar Imagen
+       run: Get-item servidor.tar
+       
+     - name: Cargar Imagen de docker
+       run: docker load -i servidor.tar
+       
+     - name: Verificar Importacion
+       shell: pwsh
+       run: |
+        docker images
+        docker inspect minecraft-server:latest
+    
