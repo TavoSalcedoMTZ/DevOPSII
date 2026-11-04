@@ -31,13 +31,13 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Constuir Imagen
-      run: docker build -t servidor-minecraft:lastest
+      run: docker build -t servidor-minecraft:lastest .
 
     - name: Exportar imagen
       run: docker save servidor-minecraft:latest -o servidor.tar
 
     - name: Subir Imagen
-      uses: actions/upload-artifac@v7
+      uses: actions/upload-artifact@v7
       with:
         name: imagen-docker
         path: servidor.tar
