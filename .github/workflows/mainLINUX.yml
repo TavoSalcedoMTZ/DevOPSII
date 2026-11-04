@@ -54,8 +54,8 @@ jobs:
        with:
           name: imagen-docker
           
-     - name: Verificar Imagen
-       run: Get-item servidor.tar
+    # - name: Verificar Imagen
+     #  run: Get-item servidor.tar
        
      - name: Cargar Imagen de docker
        run: docker load -i servidor.tar
