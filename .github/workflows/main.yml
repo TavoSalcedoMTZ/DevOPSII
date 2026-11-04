@@ -1,10 +1,6 @@
 name: Builder Imagen
 
 on:
-  push:
-    tags:
-      - "v*"
-
   workflow_dispatch: # Manual
 
 permissions:
@@ -25,31 +21,24 @@ jobs:
         with:
           dockerfile: Dockerfile
           ignore: DL3008, DL4006
-  
-  publicar:
-    needs: revisar
-    name: Iniciar Sesion en GHCR
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Iniciar Sesion
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Importar Checkout
-        uses: actions/checkout@v4
-        
-      - name: Construir
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/tavosalcedomtz/minecraft-server:${{github.ref_name}}
-
-
-
-  
           
+  construir:
+    needs: revisar
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Descargar Repo  
+      uses: actions/checkout@v4
+
+    - name: Constuir Imagen
+      run: docker build -t servidor-minecraft:lastest
+
+    - name: Exportar imagen
+      run: docker save servidor-minecraft:latest -o servidor.tar
+
+    - name: Subir Imagen
+      uses: actions/upload-artifac@v7
+      with:
+        name: imagen-docker
+        path: servidor.tar
+        compression-level: 0
