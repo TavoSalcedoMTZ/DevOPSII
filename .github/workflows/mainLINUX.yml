@@ -24,7 +24,7 @@ jobs:
           
   construir-windows:
     needs: revisar
-    runs-on: windows-latest
+    runs-on: Windows
 
     steps:
     - name: Descargar Repo  
@@ -46,7 +46,7 @@ jobs:
 
   construir-linux:
     needs: revisar
-    runs-on: ubuntu-22.04
+    runs-on: Linux
 
     steps:
     - name: Descargar Repo  
